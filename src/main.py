@@ -2,8 +2,8 @@ import argparse
 
 from waitress import serve
 
-from .server import app
-from .config_ops import make_config
+from .server import create_app
+from .config import make_config
 
 def main():
     parser = argparse.ArgumentParser()
@@ -24,9 +24,9 @@ def main():
         debug = args['debug']
 
         if debug:
-            app.run(host=ip, port=port, debug=True)
+            create_app().run(host=ip, port=port, debug=True)
         else:
-            serve(app, host=ip, port=port)
+            serve(create_app(), host=ip, port=port)
     
     elif args['subcommand'] == 'config':
         make_config(args)

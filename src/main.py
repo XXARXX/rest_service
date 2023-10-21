@@ -27,6 +27,7 @@ def main():
         if debug:
             create_app().run(host=ip, port=port, debug=True)
         else:
+            print('run server on %s:%s in production mode' % (ip, port))
             serve(create_app(), host=ip, port=port)
     
     elif subcommand == 'config':

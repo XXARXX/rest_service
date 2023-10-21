@@ -46,3 +46,11 @@ class ServerTest(unittest.TestCase):
     def test_get_empty_filter(self):
         response = self.client.get('http://localhost:5000/api/show_file_content?filename=simpletestfile.txt&filter=')
         self.assertEqual(response.status, '400 BAD REQUEST')
+
+    def test_get_file_outside_of_search_folder(self):
+        response = self.client.get('http://localhost:5000/api/show_file_content?filename=../simpletestfile.txt')
+        self.assertEqual(response.status, '404 NOT FOUND')
+    
+    def test_get_not_exist_file(self):
+        response = self.client.get('http://localhost:5000/api/show_file_content?filename=simpletestf.txt')
+        self.assertEqual(response.status, '404 NOT FOUND')

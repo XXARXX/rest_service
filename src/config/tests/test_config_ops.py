@@ -76,3 +76,14 @@ class ConfigTest(unittest.TestCase):
                 f.write(tree)
             base_dir = conf.load_base_dir(config_path)
             self.assertEqual(valid_base_dir, base_dir)
+    
+    def test_load_config(self):
+        config_name = 'config.xml'
+        valid_data = 'C:\\test\\base directory'
+        tree = '<config><base_dir>%s</base_dir></config>' % valid_data
+        with TemporaryDirectory() as tempdir:
+            config_path = "%s\\%s" % (tempdir, config_name)
+            with open(config_path, 'w') as f:
+                f.write(tree)
+            config_dict = conf.load_config(config_path)
+            self.assertEqual(config_dict['base_dir'], valid_data)

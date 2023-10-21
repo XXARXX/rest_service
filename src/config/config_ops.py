@@ -6,24 +6,6 @@ from flask import g
 class ConfigError(Exception):
     pass
 
-class ConfigExtension:
-    def __init__(self, app=None):
-        if app is not None:
-            self.init_app(app)
-    
-    def init_app(self, app, config_path=None):
-        if config_path is None:
-            self.base_dir = load_base_dir()
-        else:
-            self.base_dir = load_base_dir(config_path)
-
-        if not Path(self.base_dir).is_dir():
-            raise ValueError("'%s' does not exist or is not directory" % self.base_dir)
-
-        @app.before_request
-        def base_dir():
-            g.base_dir = self.base_dir
-
 def make_config(args, config_path = 'config.xml'):    
     tree = make_tree()
     root = tree.getroot()
@@ -61,3 +43,17 @@ def load_base_dir(config_path = 'config.xml'):
         if base_dir is None:
             raise ConfigError('invalid config file')
         return base_dir
+
+def load_config(config_path = 'config.xml'):
+    with open(config_path) as f:
+        data = f.read()
+        try:
+            root = ET.fromstring(data)
+        except ET.ParseError as e:
+            raise ConfigError('invalid config file: %s' % e)
+
+        config = {}
+
+        for elem in root.findall('./*'):
+            config[elem.tag] = elem.text
+        return config

@@ -2,7 +2,8 @@ from pathlib import Path
 
 from flask import Flask, request, abort, g
 
-from .config import load_base_dir, ConfigExtension
+from .config import load_base_dir
+from .config_ext import ConfigExtension
 
 config_extension = ConfigExtension()
 

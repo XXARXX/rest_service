@@ -16,6 +16,12 @@ def create_app(test_env: bool = False):
         filter_str = request.args.get('filter')
         as_html = request.args.get('ashtml')
 
+        if filter_str is not None:
+            if filter_str[0] != '"' or filter_str[-1] != '"':
+                abort(400)
+
+            filter_str = filter_str[1:-1]
+
         if not file_name:
             abort(400)
 

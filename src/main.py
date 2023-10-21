@@ -2,8 +2,8 @@ import argparse
 
 from waitress import serve
 
-from server import app
-from config_ops import make_config
+from .server import app
+from .config_ops import make_config
 
 def main():
     parser = argparse.ArgumentParser()

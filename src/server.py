@@ -18,7 +18,7 @@ def create_app(test_env: bool = False):
         as_html = request.args.get('ashtml')
 
         if filter_str is not None:
-            if filter_str[0] != '"' or filter_str[-1] != '"':
+            if not (filter_str.startswith('"') or filter_str.endswith('"')):
                 abort(400)
 
             filter_str = filter_str[1:-1]

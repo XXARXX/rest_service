@@ -42,3 +42,7 @@ class ServerTest(unittest.TestCase):
         response = self.client.get('http://localhost:5000/api/show_file_content?filename=simpletestfile.txt&filter="The"')
         data = response.data.decode('utf-8')
         self.assertEqual(data, valid_data)
+    
+    def test_get_empty_filter(self):
+        response = self.client.get('http://localhost:5000/api/show_file_content?filename=simpletestfile.txt&filter=')
+        self.assertEqual(response.status, '400 BAD REQUEST')

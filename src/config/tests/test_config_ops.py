@@ -2,7 +2,7 @@ import unittest
 from tempfile import TemporaryDirectory
 import xml.etree.ElementTree as ET
 
-import src.config_ops as conf
+import src.config as conf
 
 class ConfigTest(unittest.TestCase):
     def test_create_config(self):

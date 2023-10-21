@@ -18,7 +18,8 @@ def main():
     config_parser.add_argument('-b', '--base-dir', required=True, dest='base_dir', help='base directory where search files')
     
     args = vars(parser.parse_args())
-    if args['subcommand'] == 'server':
+    subcommand = args.pop('subcommand')
+    if subcommand == 'server':
         ip = args['address']
         port = args['port']
         debug = args['debug']
@@ -28,7 +29,7 @@ def main():
         else:
             serve(create_app(), host=ip, port=port)
     
-    elif args['subcommand'] == 'config':
+    elif subcommand == 'config':
         make_config(args)
 
 if __name__ == '__main__':

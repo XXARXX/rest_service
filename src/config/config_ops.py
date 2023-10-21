@@ -24,14 +24,11 @@ class ConfigExtension:
         def base_dir():
             g.base_dir = self.base_dir
 
-def make_config(args, config_path = 'config.xml'):
-    base_dir = args['base_dir']
-    if not base_dir:
-        raise ValueError('base directory must be present')
-    
+def make_config(args, config_path = 'config.xml'):    
     tree = make_tree()
     root = tree.getroot()
-    set_key('base_dir', base_dir, tree)
+    for k, v in args.items():
+        set_key(k, v, tree)
     tree.write(config_path, encoding='UTF-8', xml_declaration=True)
 
 def make_tree():

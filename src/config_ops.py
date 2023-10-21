@@ -1,6 +1,10 @@
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 from flask import g
+
+class ConfigError(Exception):
+    pass
 
 class ConfigExtension:
     def __init__(self, app=None):
@@ -12,7 +16,10 @@ class ConfigExtension:
             self.base_dir = load_base_dir()
         else:
             self.base_dir = load_base_dir(config_path)
-            
+
+        if not Path(self.base_dir).is_dir():
+            raise ValueError("'%s' does not exist or is not directory" % self.base_dir)
+
         @app.before_request
         def base_dir():
             g.base_dir = self.base_dir
@@ -49,6 +56,11 @@ def set_key(key, value, tree):
 def load_base_dir(config_path = 'config.xml'):
     with open(config_path) as f:
         data = f.read()
-        tree = ET.fromstring(data)
+        try:
+            tree = ET.fromstring(data)
+        except ET.ParseError as e:
+            raise ConfigError('invalid config file: %s' % e)
         base_dir = tree.findtext('base_dir')
+        if base_dir is None:
+            raise ConfigError('invalid config file')
         return base_dir

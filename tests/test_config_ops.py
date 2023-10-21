@@ -50,3 +50,29 @@ class ConfigTest(unittest.TestCase):
                 f.write(tree)
             base_dir = conf.load_base_dir(config_path)
             self.assertEqual(valid_base_dir, base_dir)
+
+    @unittest.expectedFailure
+    def test_load_base_dir_not_found_key(self):
+        config_name = 'config.xml'
+        valid_base_dir = 'C:\\test\\base directory'
+        tree = '<config><bas_dir>%s</bas_dir></config>' % valid_base_dir
+        
+        with TemporaryDirectory() as tempdir:
+            config_path = "%s\\%s" % (tempdir, config_name)
+            with open(config_path, 'w') as f:
+                f.write(tree)
+            base_dir = conf.load_base_dir(config_path)
+            self.assertEqual(valid_base_dir, base_dir)
+    
+    @unittest.expectedFailure
+    def test_load_base_dir_invalid_config(self):
+        config_name = 'config.xml'
+        valid_base_dir = 'C:\\test\\base directory'
+        tree = '<config><base_dir>%s</bas_dir></config>' % valid_base_dir
+        
+        with TemporaryDirectory() as tempdir:
+            config_path = "%s\\%s" % (tempdir, config_name)
+            with open(config_path, 'w') as f:
+                f.write(tree)
+            base_dir = conf.load_base_dir(config_path)
+            self.assertEqual(valid_base_dir, base_dir)

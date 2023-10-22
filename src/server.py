@@ -18,7 +18,7 @@ def create_app(test_env: bool = False):
         as_html = request.args.get('ashtml')
 
         if filter_str is not None:
-            if not (filter_str.startswith('"') or filter_str.endswith('"')):
+            if not validate_filter(filter_str):
                 abort(400)
 
             filter_str = filter_str[1:-1]
@@ -43,6 +43,14 @@ def create_app(test_env: bool = False):
             return get_formatted(data, as_html)
 
     return app
+
+def validate_filter(filter_str):
+    if len(filter_str) < 2:
+        return False
+    if not (filter_str.startswith('"') and filter_str.endswith('"')):
+        return False
+    
+    return True
 
 def get_formatted(data: list, as_html: any):
     if as_html:
